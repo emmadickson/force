@@ -1,4 +1,6 @@
 const chalk = require("chalk")
+
+// @ts-check
 const merge = require("webpack-merge")
 
 const {
@@ -8,6 +10,7 @@ const {
   ANALYZE_BUNDLE,
   BUILD_SERVER,
   NODE_ENV,
+  V2,
 } = require("../src/lib/environment")
 
 const {
@@ -17,12 +20,17 @@ const {
   developmentConfig,
   productionConfig,
   serverConfig,
+  v2Config,
 } = require("./envs")
 
 const getConfig = () => {
   console.log(chalk.green(`\n[Force] NODE_ENV=${NODE_ENV} \n`))
 
   switch (true) {
+    // Experimental
+    case !!V2:
+      return v2Config
+
     case ANALYZE_BUNDLE:
       return merge.smart(baseConfig, debugConfig)
 

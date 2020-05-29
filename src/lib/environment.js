@@ -1,6 +1,6 @@
 // @ts-check
 
-const { CI, NODE_ENV } = process.env
+const { CI, NODE_ENV, V2 } = process.env
 const ANALYZE_BUNDLE = process.env.ANALYZE_BUNDLE === "true"
 const BUILD_SERVER = process.env.BUILD_SERVER === "true"
 const DEBUG = process.env.DEBUG !== undefined
@@ -16,6 +16,7 @@ module.exports = {
   BUILD_SERVER,
   DEBUG,
   NODE_ENV,
+  V2,
   isDevelopment,
   isStaging,
   isProduction,

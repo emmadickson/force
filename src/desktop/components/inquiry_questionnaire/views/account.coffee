@@ -2,8 +2,8 @@ _ = require 'underscore'
 Backbone = require 'backbone'
 StepView = require './step.coffee'
 Form = require '../../form/index.coffee'
-FormMixin = require '../../mixins/form'
-FormErrorHelpers = require '../helpers'
+# FormMixin = require '../../mixins/form'
+# FormErrorHelpers = require '../helpers'
 sd = require('sharify').data
 templates =
   register: -> require('../templates/account/register.jade') arguments...
@@ -14,8 +14,8 @@ templates =
 mediator = require('../../../lib/mediator.coffee')
 
 module.exports = class Account extends StepView
-  _.extend @prototype, FormMixin
-  _.extend @prototype, FormErrorHelpers
+  # _.extend @prototype, FormMixin
+  # _.extend @prototype, FormErrorHelpers
   className: 'iq-account'
 
   template: ->
