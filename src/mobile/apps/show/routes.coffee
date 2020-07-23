@@ -9,7 +9,7 @@ ViewHelpers = require '../../apps/show/helpers/view_helpers'
 module.exports.index = (req, res, next) ->
   show = new Show id: req.params.id
 
-  Q.all([
+  Promise.all([
     # Fetch the non-nested route (because we don't have the partner) and Gravity 302 redirects
     # to the nested partner show route.
     show.fetch(cache: true)
@@ -17,7 +17,7 @@ module.exports.index = (req, res, next) ->
   ])
   .then ->
     if show.get 'displayable'
-      Q.all([
+      Promise.all([
         # We have to refetch the show to hit the endpoint that's nested under the partner route
         # now that we have the partner.
         # This might return stale data due to some HTTP caching.

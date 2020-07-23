@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 benv = require 'benv'
 sinon = require 'sinon'
 Backbone = require 'backbone'
@@ -25,7 +24,7 @@ xdescribe 'NotificationsView', ->
     benv.teardown()
 
   beforeEach ->
-    sinon.stub(Backbone, 'sync').returns Q.resolve()
+    sinon.stub(Backbone, 'sync').returns Promise.resolve()
 
   afterEach ->
     Backbone.sync.restore()

@@ -69,15 +69,15 @@ module.exports = class Inquiry extends StepView
         .related().collectorProfile
         .related().userFairActions.attendFair @artwork.related().fairs.first()
 
-    @__serialize__ = Q.allSettled [
+    @__serialize__ = Promise.allSettled [
       @maybeSaveInquiry data
       @user.save @inquiry.pick('name', 'email')
       @user.related().account.fetch()
-      Q.promise (resolve) -> _.delay resolve, 1000
+      new Promise (resolve) -> _.delay resolve, 1000
     ]
       .then =>
         @state.set 'inquiry', @inquiry
-        Q.allSettled(
+        Promise.allSettled(
           @user
             .related().collectorProfile
             .related().userFairActions.invoke 'save'

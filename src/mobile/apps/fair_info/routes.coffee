@@ -15,7 +15,7 @@ module.exports.assignFair = (req, res, next) ->
   res.locals.sd.PAGE_TYPE = 'fair'
   fair = new Fair req.profile.get('owner')
   infoMenu = new InfoMenu fair: fair
-  Q.all([
+  Promise.all([
     fair.fetch(cache: false)
     infoMenu.fetch(cache: false)
   ]).then () ->
@@ -138,7 +138,7 @@ module.exports.armoryArtsWeekAll = (req, res, next) ->
   neighborhoods = _.map aawMap, (neighborhood) ->
     _.extend neighborhood, { article: new Article id: neighborhood.id }
 
-  Q.all _.map neighborhoods, (hood) -> hood.article.fetch()
+  Promise.all _.map neighborhoods, (hood) -> hood.article.fetch()
   .then ->
     res.render 'armory_arts_week_all',
       neighborhoods: neighborhoods

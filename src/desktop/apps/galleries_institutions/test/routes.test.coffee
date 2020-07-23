@@ -1,6 +1,5 @@
 { fabricate } = require '@artsy/antigravity'
 _ = require 'underscore'
-Q = require 'bluebird-q'
 sinon = require 'sinon'
 rewire = require 'rewire'
 Backbone = require 'backbone'

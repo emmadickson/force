@@ -9,7 +9,7 @@ module.exports = class OrderedSet extends Backbone.Model
     dfd = Q.defer()
     items = new Items null, id: @id, item_type: @get('item_type')
     @set items: items
-    Q.allSettled(items.fetch(cache: cache).then ->
+    Promise.allSettled(items.fetch(cache: cache).then ->
       items.map (item) ->
         if _.isFunction(item.fetchItems) then item.fetchItems(cache) else item
     ).then dfd.resolve

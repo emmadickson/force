@@ -119,7 +119,7 @@ module.exports = class CurrentUser extends Backbone.Model
         @markNotifications 'read', options
 
   findOrCreate: (options = {}) ->
-    Q(@fetch options)
+    Promise.resolve(@fetch options)
 
   isLinkedTo: (provider) ->
     @related().authentications.where(provider: provider).length > 0

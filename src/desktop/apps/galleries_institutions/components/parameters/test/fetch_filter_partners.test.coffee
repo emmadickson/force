@@ -1,5 +1,4 @@
 Backbone = require 'backbone'
-Q = require 'bluebird-q'
 _ = require 'underscore'
 rewire = require 'rewire'
 { fabricate } = require '@artsy/antigravity'
@@ -143,7 +142,7 @@ describe 'FetchFilterPartners', ->
 
           @stub = sinon.stub()
           FetchFilterPartners.__set__ 'metaphysics', @stub
-          @stub.returns Q.promise (resolve, reject) ->
+          @stub.returns new Promise (resolve, reject) ->
             resolve _.extend {}, results, aggregationsResponse
 
           @params = new Params { location: 'new-york-ny-usa', category: 'painting', type: 'gallery' }
@@ -200,7 +199,7 @@ describe 'FetchFilterPartners', ->
               hits: nPartners(10)
 
             FetchFilterPartners.__set__ 'metaphysics', ->
-              Q.promise (resolve, reject) ->
+              new Promise (resolve, reject) ->
                 return resolve _.extend {}, results, aggregationsResponse
 
             @filterPartners.fetch().then =>
@@ -210,7 +209,7 @@ describe 'FetchFilterPartners', ->
         beforeEach ->
           @stub = sinon.stub()
           FetchFilterPartners.__set__ 'metaphysics', @stub
-          @stub.returns Q.promise (resolve, reject) ->
+          @stub.returns new Promise (resolve, reject) ->
             resolve results: hits: nPartners(10)
 
           @params = new Params { location: 'new-york-ny-usa', category: 'painting', type: 'gallery' }
@@ -269,7 +268,7 @@ describe 'FetchFilterPartners', ->
       beforeEach ->
         @stub = sinon.stub()
         FetchFilterPartners.__set__ 'metaphysics', @stub
-        @stub.returns Q.promise (resolve, reject) ->
+        @stub.returns new Promise (resolve, reject) ->
           resolve  aggregationsResponse
 
         @params = new Params { type: 'gallery' }

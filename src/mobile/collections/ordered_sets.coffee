@@ -22,7 +22,7 @@ class OrderedSets extends Backbone.Collection
 
   fetchSets: (options = {}) ->
     dfd = Q.defer()
-    Q.allSettled(@map (model) ->
+    Promise.allSettled(@map (model) ->
       model.fetchItems options?.cache
     ).then dfd.resolve
     dfd.promise

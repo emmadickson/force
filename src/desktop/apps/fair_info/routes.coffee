@@ -2,7 +2,6 @@ _ = require 'underscore'
 Fair = require '../../models/fair'
 FairEvent = require '../../models/fair_event'
 FairEvents = require '../../collections/fair_events'
-Q = require 'bluebird-q'
 embed = require 'particle'
 { resize } = require '../../components/resizer/index.coffee'
 Article = require '../../models/article'
@@ -14,7 +13,7 @@ Articles = require '../../collections/articles'
   res.locals.sd.PAGE_TYPE = 'fair'
   fair = new Fair res.locals.profile.get('owner')
   infoMenu = new InfoMenu fair: fair
-  Q.all([
+  Promise.all([
     fair.fetch(cache: true)
     infoMenu.fetch(cache: true)
   ]).then () ->
@@ -100,7 +99,7 @@ aawMap = require './maps/armory_arts_week_neighborhoods'
   neighborhoods = _.map aawMap, (neighborhood) ->
     _.extend neighborhood, { article: new Article id: neighborhood.id }
 
-  Q.all _.map neighborhoods, (hood) -> hood.article.fetch()
+  Promise.all _.map neighborhoods, (hood) -> hood.article.fetch()
   .then ->
     res.render 'armory_arts_week_all',
       neighborhoods: neighborhoods,

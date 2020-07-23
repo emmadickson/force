@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 benv = require 'benv'
 Backbone = require 'backbone'
 sinon = require 'sinon'

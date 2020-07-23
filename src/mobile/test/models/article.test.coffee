@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 Backbone = require 'backbone'
 { fabricate } = require '@artsy/antigravity'
 rewire = require 'rewire'
@@ -22,10 +21,10 @@ describe "Article", ->
       Backbone.sync
         .onCall 0
         .yieldsTo 'success', [fabricate 'article']
-        .returns Q.resolve [fabricate 'article']
+        .returns Promise.resolve [fabricate 'article']
         .onCall 1
         .yieldsTo 'success', fabricate 'fair'
-        .returns Q.resolve fabricate 'fair'
+        .returns Promise.resolve fabricate 'fair'
       @article.set
         id: 'id-1'
         fair_ids: ['123']
@@ -37,10 +36,10 @@ describe "Article", ->
       Backbone.sync
         .onCall 0
         .yieldsTo 'success', [fabricate 'article']
-        .returns Q.resolve [fabricate 'article']
+        .returns Promise.resolve [fabricate 'article']
         .onCall 1
         .yieldsTo 'success', fabricate 'partner'
-        .returns Q.resolve fabricate 'partner'
+        .returns Promise.resolve fabricate 'partner'
       @article.set
         id: 'id-1'
         partner_channel_id: '147'

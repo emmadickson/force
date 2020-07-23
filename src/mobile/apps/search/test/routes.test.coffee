@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 _ = require 'underscore'
 sinon = require 'sinon'
 Backbone = require 'backbone'
@@ -9,7 +8,7 @@ describe 'Search routes', ->
   describe '#index', ->
     describe 'success', ->
       beforeEach ->
-        sinon.stub(Backbone, 'sync').returns Q.resolve()
+        sinon.stub(Backbone, 'sync').returns Promise.resolve()
 
       afterEach ->
         Backbone.sync.restore()

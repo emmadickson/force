@@ -26,7 +26,7 @@ module.exports = class NewsView extends Backbone.View
       sort: 'start_at'
       size: 3
 
-    Q.allSettled([
+    Promise.allSettled([
       showEvents.fetch data: data
       fairBooths.fetch data: _.extend {}, data, at_a_fair: true
     ])

@@ -6,7 +6,6 @@ Backbone = require 'backbone'
 { fabricate } = require '@artsy/antigravity'
 CurrentUser = require '../../../models/current_user.coffee'
 moment = require 'moment'
-Q = require 'bluebird-q'
 
 openSale = fabricate 'sale',
   name: 'Awesome Sale'

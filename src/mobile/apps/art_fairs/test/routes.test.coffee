@@ -5,7 +5,6 @@ Backbone = require 'backbone'
 moment = require 'moment'
 rewire = require 'rewire'
 routes = rewire '../routes'
-Q = require 'bluebird-q'
 
 class OrderedSetsFixture extends Backbone.Collection
   fetchAll: -> then: (cb) -> cb()
@@ -32,7 +31,7 @@ describe '#index', ->
         @pastFairs
         @upcomingFairs
       ]
-      routes.__set__ 'metaphysics', => Q.resolve { fairs: @fairs }
+      routes.__set__ 'metaphysics', => Promise.resolve { fairs: @fairs }
 
     it 'fetches the fairs and renders the index template', ->
       routes.index {}, @res

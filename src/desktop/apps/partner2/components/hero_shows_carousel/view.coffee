@@ -28,7 +28,7 @@ module.exports = class HeroShowsCarousel extends Backbone.View
     upcoming = new PartnerShows
     past = new PartnerShows
 
-    Q.allSettled([
+    Promise.allSettled([
       featured.fetch url: url, data: _.defaults(size: 1, sort: '-featured,-end_at', criteria)
       current.fetch  url: url, data: _.defaults(status: 'running', sort: 'end_at', criteria)
       upcoming.fetch url: url, data: _.defaults(status: 'upcoming', sort: 'start_at', criteria)

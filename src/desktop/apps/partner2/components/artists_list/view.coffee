@@ -29,7 +29,7 @@ module.exports = class PartnerArtistsListView extends Backbone.View
             pa.get('represented_by') or
             pa.get('published_artworks_count') > 0
     else
-      Q.promise (resolve) => resolve @collection.models
+      new Promise (resolve) => resolve @collection.models
 
   render: (artists) =>
     return @remove() if artists.length is 0

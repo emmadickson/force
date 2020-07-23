@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 routes = require '../routes'
 Backbone = require 'backbone'
 sinon = require 'sinon'
@@ -28,7 +27,7 @@ describe 'FairInfo routes', ->
         .yieldsTo 'success', {}
         .onCall 0
         .yieldsTo 'success', fabricate 'fair'
-        .returns Q.resolve {}
+        .returns Promise.resolve {}
 
     afterEach ->
       Backbone.sync.restore()

@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 _ = require 'underscore'
 Backbone = require 'backbone'
 sinon = require 'sinon'
@@ -225,7 +224,7 @@ describe 'CurrentUser', ->
       @user = new CurrentUser
 
       sinon.stub Backbone, 'sync'
-        .returns Q.resolve()
+        .returns Promise.resolve()
 
     it 'creates or persists everything needed to make an inquiry', ->
       @user.prepareForInquiry().then ->

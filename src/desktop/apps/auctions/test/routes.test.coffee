@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 sinon = require 'sinon'
 moment = require 'moment'
 Backbone = require 'backbone'
@@ -11,7 +10,7 @@ routes = rewire '../routes'
 
 describe 'Auctions routes', ->
   beforeEach ->
-    sinon.stub(Backbone, 'sync').returns Q.resolve()
+    sinon.stub(Backbone, 'sync').returns Promise.resolve()
 
   afterEach ->
     Backbone.sync.restore()
@@ -61,7 +60,7 @@ describe 'Auctions routes', ->
         @req = user: new CurrentUser fabricate 'user'
         @res = render: sinon.stub(), locals: sd: {}
         routes.__set__ 'metaphysics', ->
-          Q.promise (resolve, reject) ->
+          new Promise (resolve, reject) ->
             return resolve { me: [] }
 
       it 'fetches the relevant auction data in addition to the user bid status and renders the index template', (done) ->

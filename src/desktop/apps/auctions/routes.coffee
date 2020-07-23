@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 { API_URL } = require('sharify').data
 Auctions = require '../../collections/auctions'
 metaphysics = require '../../../lib/metaphysics'
@@ -11,7 +10,7 @@ setupUser = (user, auction) ->
       error: -> user.set 'registered_to_bid', false
     )
   else
-    Q.promise (resolve) -> resolve()
+    new Promise (resolve) -> resolve()
 
 @index = (req, res, next) ->
   auctions = new Auctions

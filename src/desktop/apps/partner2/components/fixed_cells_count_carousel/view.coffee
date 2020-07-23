@@ -25,7 +25,7 @@ module.exports = class FixedCellsCountCarousel extends Backbone.View
     @fetch().then(@consolidate).then(@initCarousel).done()
 
   fetch: ->
-    Q.allSettled(
+    Promise.allSettled(
       _.map @fetchOptions, (options) =>
         @collection.fetch data: options, remove: false
     ).then (values) =>

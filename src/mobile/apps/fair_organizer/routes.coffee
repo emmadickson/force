@@ -68,7 +68,7 @@ module.exports.fetchFairOrgData = (req, res, next) ->
         )
       ]
 
-      Q.allSettled(promises).then(->
+      Promise.allSettled(promises).then(->
         res.locals.newestFair = res.locals.sd.FAIR = fairs.models[0]
         res.locals.sd.FAIR_IDS = fairs.pluck('_id')
         res.locals.sd.FAIR_ORGANIZER = fairOrg.toJSON()

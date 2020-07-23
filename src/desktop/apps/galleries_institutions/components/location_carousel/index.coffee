@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 Backbone = require 'backbone'
 Partners = require '../../../../collections/partners.coffee'
 metaphysics = require '../../../../../lib/metaphysics.coffee'
@@ -9,7 +8,7 @@ mergeBuckets = require '../partner_cell_carousel/merge_buckets.coffee'
 
 module.exports = (type) ->
 
-  Q.promise (resolve, reject) ->
+  new Promise (resolve, reject) ->
     $.get '/geo/nearest', ({ name, latitude, longitude, slug }) ->
       typeName = if type is 'gallery' then 'Galleries' else 'Institutions'
       category = { name: "Featured #{typeName} near #{name}", id: slug, facet: 'location' }

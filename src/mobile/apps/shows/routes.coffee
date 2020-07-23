@@ -35,7 +35,7 @@ module.exports.city = (req, res, next) ->
   past = new PartnerShows
   past.comparator = (show) -> -(Date.parse(show.get('end_at')))
 
-  Q.allSettled([
+  Promise.allSettled([
     upcoming.fetch(cache: true, data: criteria('upcoming'))
     current.fetch(cache: true, data: criteria('running'))
     past.fetch(cache: true, data: criteria('closed'))

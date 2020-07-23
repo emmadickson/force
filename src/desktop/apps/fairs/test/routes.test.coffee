@@ -2,7 +2,6 @@ _ = require 'underscore'
 sinon = require 'sinon'
 moment = require 'moment'
 rewire = require 'rewire'
-Q = require 'bluebird-q'
 { fabricate } = require '@artsy/antigravity'
 routes = rewire '../routes'
 ViewHelpers = require '../helpers/view_helpers.coffee'
@@ -35,7 +34,7 @@ describe 'Fairs routes', ->
           @pastFairs
           @upcomingFairs
         ]
-        routes.__set__ 'metaphysics', => Q.resolve { featured_fairs: [ fairs: {} ], fairs: @fairs }
+        routes.__set__ 'metaphysics', => Promise.resolve { featured_fairs: [ fairs: {} ], fairs: @fairs }
 
       it 'fetches the fairs and renders the index template', ->
         routes.index {}, @res
@@ -51,7 +50,7 @@ describe 'Fairs routes', ->
           @pastFairs
           @upcomingFairs
         ]
-        routes.__set__ 'metaphysics', => Q.resolve { featured_fairs: [ fairs: {} ], fairs: @fairs }
+        routes.__set__ 'metaphysics', => Promise.resolve { featured_fairs: [ fairs: {} ], fairs: @fairs }
 
       it 'fetches the fairs and renders the index template', ->
         routes.index {}, @res

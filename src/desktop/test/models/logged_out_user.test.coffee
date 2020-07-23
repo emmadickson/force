@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 _ = require 'underscore'
 benv = require 'benv'
 sinon = require 'sinon'
@@ -241,7 +240,7 @@ describe 'LoggedOutUser', ->
 
       sinon.stub Backbone, 'sync'
         .yieldsTo 'success', {}
-        .returns Q.resolve()
+        .returns Promise.resolve()
 
     afterEach ->
       Backbone.sync.restore()

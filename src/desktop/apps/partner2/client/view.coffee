@@ -80,7 +80,7 @@ module.exports = class PartnerView extends Backbone.View
       limit: 1
       count: true
 
-    Q.allSettled([@partner.fetch(), articles.fetch(data: articlesFetchData)])
+    Promise.allSettled([@partner.fetch(), articles.fetch(data: articlesFetchData)])
       .then => @partnerArticlesCount = articles.count
 
   initializePartnerLocations: ->

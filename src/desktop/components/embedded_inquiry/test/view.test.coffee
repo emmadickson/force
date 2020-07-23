@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 _ = require 'underscore'
 benv = require 'benv'
 sinon = require 'sinon'

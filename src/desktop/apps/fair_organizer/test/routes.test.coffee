@@ -1,7 +1,6 @@
 { fabricate } = require '@artsy/antigravity'
 fixtures = require '../../../test/helpers/fixtures.coffee'
 _ = require 'underscore'
-Q = require 'bluebird-q'
 sinon = require 'sinon'
 Backbone = require 'backbone'
 rewire = require 'rewire'
@@ -66,7 +65,7 @@ describe 'Fair Organization routes', ->
       Backbone.sync
         .onCall 1
         .yieldsTo 'success'
-        .returns Q.promise (resolve, reject) -> resolve(fabricate('fair_profile'))
+        .returns new Promise (resolve, reject) -> resolve(fabricate('fair_profile'))
       Backbone.sync.yieldsTo 'success'
       routes.fetchFairOrgData(@req, @res, (next = sinon.stub())).then =>
         @res.redirect.args[0][0].should.equal '/the-armory-show'
@@ -82,7 +81,7 @@ describe 'Fair Organization routes', ->
       Backbone.sync
         .onCall 1
         .yieldsTo 'error'
-        .returns Q.promise (resolve, reject) -> reject()
+        .returns new Promise (resolve, reject) -> reject()
       Backbone.sync.yieldsTo 'success'
       routes.fetchFairOrgData(@req, @res, (next = sinon.stub())).then =>
         @res.redirect.notCalled.should.be.ok()

@@ -14,12 +14,12 @@ module.exports = class InfoMenu
     @key = "fair:#{@fair.id}:info_menu"
 
   fetch: ({ @cache }) ->
-    Q.promise (resolve, reject) =>
+    new Promise (resolve, reject) =>
       cache.getHash @key, {}, (err, data) =>
         if data and @cache
           return resolve @infoMenu = data
 
-        Q.all [
+        Promise.all [
           @fetchEvents()
           @fetchProgramming()
           @fetchAtTheFair()
@@ -32,7 +32,7 @@ module.exports = class InfoMenu
           .done()
 
   fetchEvents: ->
-    Q.promise (resolve) =>
+    new Promise (resolve) =>
       events = new FairEvents [], { fairId: @fair.id }
       events.fetchUntilEndInParallel
         error: (err) ->
@@ -41,7 +41,7 @@ module.exports = class InfoMenu
           resolve events: !!collection.length
 
   fetchArticle: (urlParam, key) ->
-    Q.promise (resolve) =>
+    new Promise (resolve) =>
       articles = new Articles
       articles.fetch
         data:

@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 benv = require 'benv'
 sinon = require 'sinon'
 Backbone = require 'backbone'
@@ -13,7 +12,7 @@ describe 'Specialist', setup ->
     sinon.stub Backbone, 'sync'
       .onCall 0
       .yieldsTo 'success', [@representative]
-      .returns Q.resolve [@representative]
+      .returns Promise.resolve [@representative]
 
   afterEach ->
     Backbone.sync.restore()
