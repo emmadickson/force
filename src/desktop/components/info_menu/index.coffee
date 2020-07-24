@@ -1,9 +1,9 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 Backbone = require 'backbone'
 cache = require '../../lib/cache'
 FairEvents = require '../../collections/fair_events'
 Articles = require '../../collections/articles'
+require '../../../lib/promiseDone'
 { API_URL } = require('sharify').data
 
 DEFAULT_CACHE_TIME = 60

@@ -1,6 +1,5 @@
 _ = require 'underscore'
 sd = require('sharify').data
-Q = require 'bluebird-q'
 Profile = require '../../models/profile.coffee'
 Fair = require '../../models/fair.coffee'
 PartnerLocation = require '../../models/partner_location.coffee'
@@ -9,6 +8,7 @@ FairEvents = require '../../collections/fair_events.coffee'
 InfoMenu = require './info_menu.coffee'
 Articles = require '../../collections/articles.coffee'
 Article = require '../../models/article.coffee'
+require '../../../lib/promiseDone'
 
 module.exports.assignFair = (req, res, next) ->
   return next() unless req.profile?.isFair()
@@ -145,5 +145,5 @@ module.exports.armoryArtsWeekAll = (req, res, next) ->
   .catch (err) ->
     console.log 'err', err
     next err
-  .done()
+  .finally()
 

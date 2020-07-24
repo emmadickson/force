@@ -1,6 +1,6 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 Items = require '../../collections/items'
+require '../../../lib/promiseDone'
 
 PartnerShows = require '../../collections/partner_shows'
 {Cities, FeaturedCities} = require 'places'
@@ -54,7 +54,8 @@ module.exports.city = (req, res, next) ->
       current: current.models
       past: past.models
       size: criteria().size
-  ).done()
+  )
+  .done()
 
 module.exports.all_cities = (req, res, next) ->
   res.render 'all_cities', cities: Cities

@@ -1,9 +1,9 @@
 sd = require('sharify').data
-Q = require 'bluebird-q'
 moment = require 'moment'
 Show = require '../../models/show.coffee'
 Location = require '../../models/location.coffee'
 ViewHelpers = require '../../apps/show/helpers/view_helpers'
+require '../../../lib/promiseDone'
 
 
 module.exports.index = (req, res, next) ->
@@ -32,7 +32,7 @@ module.exports.index = (req, res, next) ->
             res.locals.sd.ARTWORKS = artworks
       ])
     else
-      Q.promise.reject()
+      Promise.reject()
 
   .then ->
 

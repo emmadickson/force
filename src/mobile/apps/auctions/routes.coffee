@@ -1,9 +1,9 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 { API_URL } = require('sharify').data
 Backbone = require 'backbone'
 Sales = require '../../collections/sales'
 Artworks = require '../../collections/artworks'
+require '../../../lib/promiseDone'
 
 eligibleFilter = _.partial _.filter, _, ((sale) ->
   # Reject sales without artworks
@@ -49,4 +49,5 @@ module.exports.index = (req, res) ->
           pastAuctions: closed
           currentAuctions: sortedOpen
           upcomingAuctions: preview
-      ).done()
+      )
+      .done()

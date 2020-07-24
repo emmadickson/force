@@ -7,6 +7,7 @@ embed = require 'particle'
 Article = require '../../models/article'
 InfoMenu = require '../../components/info_menu/index.coffee'
 Articles = require '../../collections/articles'
+require '../../../lib/promiseDone'
 
 @assignFair = (req, res, next) ->
   return next() unless res.locals.profile?.isFair()

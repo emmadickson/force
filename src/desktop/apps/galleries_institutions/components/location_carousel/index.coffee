@@ -5,9 +5,9 @@ metaphysics = require '../../../../../lib/metaphysics.coffee'
 partnerTypes = require '../../queries/partner_types.coffee'
 query = require '../../queries/location_carousel_query.coffee'
 mergeBuckets = require '../partner_cell_carousel/merge_buckets.coffee'
+require '../../../../../lib/promiseDone'
 
 module.exports = (type) ->
-
   new Promise (resolve, reject) ->
     $.get '/geo/nearest', ({ name, latitude, longitude, slug }) ->
       typeName = if type is 'gallery' then 'Galleries' else 'Institutions'

@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 { parse } = require 'url'
 Backbone = require 'backbone'
 sd = require('sharify').data
@@ -18,16 +17,15 @@ positionWelcomeHeroMethod = (req, res) ->
   method
 
 fetchMetaphysicsData = (req, showHeroUnits, showCollectionsHubs)->
-  deferred = Q.defer()
-
-  metaphysics(query: query, req: req, variables: {showHeroUnits: showHeroUnits, showCollectionsHubs: showCollectionsHubs})
-    .then (data) -> deferred.resolve data
-    .catch (err) ->
-      deferred.resolve
-        home_page:
-          artwork_modules: []
-          hero_units: err.data.home_page.hero_units
-  deferred.promise
+  new Promise((resolve) ->
+    metaphysics(query: query, req: req, variables: {showHeroUnits: showHeroUnits, showCollectionsHubs: showCollectionsHubs})
+      .then (data) -> resolve data
+      .catch (err) ->
+        resolve
+          home_page:
+            artwork_modules: []
+            hero_units: err.data.home_page.hero_units
+  )
 
 @index = (req, res, next) ->
   return if metaphysics.debug req, res, { method: 'post', query: query }
@@ -45,10 +43,10 @@ fetchMetaphysicsData = (req, showHeroUnits, showCollectionsHubs)->
       "query-input": "required name=search_term_string"
     }
   }
-  
+
   showCollectionsHubs = !res.locals.sd.CURRENT_USER
   res.locals.sd.PAGE_TYPE = 'home'
-  initialFetch = Q
+  initialFetch = Promise
     .allSettled [
       fetchMetaphysicsData req, true, showCollectionsHubs
       featuredLinks.fetch cache: true
@@ -75,5 +73,5 @@ fetchMetaphysicsData = (req, showHeroUnits, showCollectionsHubs)->
         browseCategories: browseCategories
         jsonLD: JSON.stringify jsonLD
         collectionsHubs: collectionsHubs
-        
+
     .catch next

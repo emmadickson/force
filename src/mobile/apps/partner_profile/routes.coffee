@@ -103,7 +103,10 @@ module.exports.shows = (req, res, next) ->
     collection.fetch data: data('running')
     collection.fetch data: data('upcoming')
     collection.fetch data: data('closed')
-  ]).spread (running, upcoming, closed) ->
+  ]).then (results) ->
+    running = results[0]
+    upcoming = results[1]
+    closed = results[2]
     res.render 'shows_page',
       currentShows: new PartnerShows running.concat upcoming
       pastShows: new PartnerShows closed

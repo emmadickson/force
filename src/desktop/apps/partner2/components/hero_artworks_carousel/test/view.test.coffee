@@ -8,6 +8,7 @@ Partner = require '../../../../../models/partner.coffee'
 Artwork = require '../../../../../models/artwork.coffee'
 FilterArtworks = require '../../../../../collections/filter_artworks.coffee'
 Artworks = require '../../../../../collections/artworks.coffee'
+require '../../../../../../lib/promiseDone'
 { resolve } = require 'path'
 { fabricate } = require '@artsy/antigravity'
 
@@ -54,7 +55,7 @@ describe 'HeroArtworksCarousel', ->
           artworks.length.should.equal 10
           artworks.models.should.eql @artworks.models
           done()
-        .done()
+      .done()
 
       Backbone.sync.args[0][2].success hits: @artworks.models
 

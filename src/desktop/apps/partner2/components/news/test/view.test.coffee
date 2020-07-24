@@ -54,7 +54,9 @@ describe 'NewsView', ->
         .onCall 1
         .yieldsTo 'success', @fairBooths.models
 
-      @view.fetch().spread (showEvents, fairBooths) =>
+      @view.fetch().then (results) =>
+        showEvents = results[0]
+        fairBooths = results[1]
         showEvents.length.should.equal 1
         fairBooths.length.should.equal 1
         showEvents.models.should.eql @partnerShowEvents.models

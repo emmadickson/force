@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 moment = require 'moment'
 Profile = require '../../models/profile.coffee'
 FairOrganizer = require '../../models/fair_organizer.coffee'
@@ -10,13 +9,13 @@ OrderedSets = require '../../collections/ordered_sets'
 Articles = require '../../collections/articles'
 
 representation = (fair) ->
-  dfd = Q.defer()
-  sets = new OrderedSets(owner_type: 'Fair', owner_id: fair.id, sort: 'key')
-  sets.fetchAll(cache: true).then ->
-    set = sets.findWhere(key: 'explore')?.get('items')
-    fair.representation = set
-    dfd.resolve set
-  dfd.promise
+  new Promise((resolve) ->
+    sets = new OrderedSets(owner_type: 'Fair', owner_id: fair.id, sort: 'key')
+    sets.fetchAll(cache: true).then ->
+      set = sets.findWhere(key: 'explore')?.get('items')
+      fair.representation = set
+      resolve set
+  )
 
 @overview = (req, res, next) ->
   # go to normal fair page when this fair switches to open or an admin adds

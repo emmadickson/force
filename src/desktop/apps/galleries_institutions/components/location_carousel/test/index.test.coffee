@@ -4,7 +4,6 @@ Backbone = require 'backbone'
 { fabricate } = require '@artsy/antigravity'
 rewire = require 'rewire'
 fetchLocationCarousel = rewire '../index'
-Q = require 'bluebird-q'
 
 describe 'fetchLocationCarousel', ->
   before (done) ->
@@ -28,7 +27,7 @@ describe 'fetchLocationCarousel', ->
 
     @metaphysics = sinon.stub()
     fetchLocationCarousel.__set__ 'metaphysics', @metaphysics
-    @metaphysics.returns Q.promise (resolve, reject) -> resolve data
+    @metaphysics.returns (new Promise ((resolve, reject) -> resolve(data)))
 
   afterEach ->
     $.get.restore()

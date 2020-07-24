@@ -1,4 +1,3 @@
-Q = require 'bluebird-q'
 _ = require 'underscore'
 StepView = require './step.coffee'
 Form = require '../../form/index.coffee'
@@ -31,17 +30,15 @@ module.exports = class Inquiry extends StepView
     hasSeen 'inquiry-nudge'
 
   maybeSaveInquiry: (data) ->
-    promise = Q.defer()
+    new Promise((resolve) ->
+      attributes = _.extend { contact_gallery: true }, data
 
-    attributes = _.extend { contact_gallery: true }, data
-
-    if @user.isLoggedOut()
-      @inquiry.set attributes
-      promise.resolve(true)
-    else
-      @inquiry.save attributes, success: -> promise.resolve(true)
-
-    promise
+      if @user.isLoggedOut()
+        @inquiry.set attributes
+        resolve(true)
+      else
+        @inquiry.save attributes, success: -> resolve(true)
+    )
 
   serialize: (e) ->
     e.preventDefault()

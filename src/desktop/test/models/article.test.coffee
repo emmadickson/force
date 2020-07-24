@@ -1,5 +1,4 @@
 _ = require 'underscore'
-Q = require 'bluebird-q'
 Backbone = require 'backbone'
 { fabricate } = require '@artsy/antigravity'
 rewire = require 'rewire'
@@ -21,7 +20,7 @@ describe "Article", ->
     Article.__set__ 'ARTSY_EDITORIAL_CHANNEL', '5759e3efb5989e6f98f77993'
     Article.__set__
     sinon.stub Backbone, 'sync'
-      .returns Q.defer()
+      .returns Promise.resolve()
     @article = new Article
 
   afterEach ->
