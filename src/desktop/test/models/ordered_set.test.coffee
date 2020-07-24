@@ -20,7 +20,7 @@ describe 'OrderedSet', ->
   afterEach ->
     Backbone.sync.restore()
 
-  xdescribe '#fetchItems', ->
+  describe '#fetchItems', ->
     # FIXME: Promises do not resolve
     it 'sets the items attribute', ->
       @orderedSet.fetchItems()

@@ -6282,13 +6282,6 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-bluebird-q@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/bluebird-q/-/bluebird-q-2.1.1.tgz#71f93d05555d60d90f27328add5730dab94e998b"
-  integrity sha1-cfk9BVVdYNkPJzKK3Vcw2rlOmYs=
-  dependencies:
-    bluebird "^3.4.6"
-
 bluebird-q@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/bluebird-q/-/bluebird-q-1.0.3.tgz#0d099248587d04212ca3070c008e4490f2586af2"
@@ -6296,7 +6289,7 @@ bluebird-q@^1.0.3:
   dependencies:
     bluebird "^2.8.0"
 
-bluebird@*, bluebird@3.5.3, bluebird@^3.1.1, bluebird@^3.4.6:
+bluebird@*, bluebird@^3.1.1:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
   integrity sha512-/qKPUQlaW1OyR51WeCPBvRnAlnZFUJkCSG5HzGnuIqhgyJtF+T94lFnn33eiazjRm2LAHVy2guNnaq48X9SJuw==

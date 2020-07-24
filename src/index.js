@@ -44,8 +44,6 @@ setAliases({
   ),
 })
 
-global.Promise = require("bluebird")
-
 const artsyXapp = require("artsy-xapp")
 const cache = require("./lib/cache.coffee")
 const { setup: relayCacheSetup } = require("./lib/cacheClient")

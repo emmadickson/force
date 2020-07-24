@@ -31,7 +31,7 @@ class OrderedSets extends Backbone.Collection
         cache: cache
         cacheTime: cacheTime
         data: options.data
-        error: dfd.resolve
+        error: resolve
         success: =>
           @fetchSets(cache: cache, cacheTime: cacheTime).then resolve()
     )
