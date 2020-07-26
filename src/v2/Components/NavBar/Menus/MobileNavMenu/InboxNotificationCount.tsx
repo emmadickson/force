@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { graphql } from "relay-runtime"
-import { isServer } from "lib/environment"
+import { isServer } from "lib/isServer"
 import styled from "styled-components"
 
 import {
@@ -21,8 +21,8 @@ const FloatingDot = styled(Flex)`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 16px;
-  left: 19px;
+  top: 11px;
+  left: 25px;
 `
 
 export const InboxNotificationCount: React.FC<

@@ -5,6 +5,7 @@ import {
   EntityHeader,
   Flex,
   Grid,
+  Image,
   Row,
   Sans,
   Separator,
@@ -16,6 +17,9 @@ import { openAuthToFollowSave } from "v2/Utils/openAuthModal"
 import { ArtistSeriesHeader_artistSeries } from "v2/__generated__/ArtistSeriesHeader_artistSeries.graphql"
 import { useSystemContext } from "v2/Artsy"
 import { Intent } from "@artsy/cohesion"
+import { resize } from "v2/Utils/resizer"
+import styled from "styled-components"
+import { unitlessBreakpoints } from "@artsy/palette"
 
 interface ArtistSeriesHeaderProps {
   artistSeries: ArtistSeriesHeader_artistSeries
@@ -84,7 +88,7 @@ const ArtistSeriesHeader: React.FC<ArtistSeriesHeaderProps> = props => {
 
 const ArtistSeriesHeaderLarge: React.FC<ArtistSeriesHeaderProps> = props => {
   const {
-    artistSeries: { title, description, artists },
+    artistSeries: { title, description, artists, image },
   } = props
   return (
     <>
@@ -101,7 +105,7 @@ const ArtistSeriesHeaderLarge: React.FC<ArtistSeriesHeaderProps> = props => {
       </Flex>
       <Separator />
       <Box m={3}>
-        <Grid>
+        <StyledGrid>
           <Row>
             <Col sm={6}>
               <Flex
@@ -119,14 +123,16 @@ const ArtistSeriesHeaderLarge: React.FC<ArtistSeriesHeaderProps> = props => {
             </Col>
             <Col sm={6}>
               <Box
-                // FIXME: Use Image
-                bg="black10"
-                width={1}
-                height={400}
-              ></Box>
+                height={"100%"}
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="center"
+              >
+                <HeaderImage src={resize(image.url, { height: 400 })} />
+              </Box>
             </Col>
           </Row>
-        </Grid>
+        </StyledGrid>
       </Box>
     </>
   )
@@ -134,7 +140,7 @@ const ArtistSeriesHeaderLarge: React.FC<ArtistSeriesHeaderProps> = props => {
 
 const ArtistSeriesHeaderSmall: React.FC<ArtistSeriesHeaderProps> = props => {
   const {
-    artistSeries: { title, description, artists },
+    artistSeries: { title, description, artists, image },
   } = props
   return (
     <>
@@ -143,13 +149,10 @@ const ArtistSeriesHeaderSmall: React.FC<ArtistSeriesHeaderProps> = props => {
       </Box>
       <Separator />
       <Box m={3}>
-        <Box
-          // FIXME: Use Image
-          mx="auto"
-          bg="black10"
-          width={180}
-          height={180}
-        ></Box>
+        <HeaderImage
+          src={resize(image.url, { height: 180, width: 180 })}
+          pb={1}
+        />
         <Sans size="8" element="h1" my={1} unstable_trackIn>
           {title}
         </Sans>
@@ -164,6 +167,27 @@ const ArtistSeriesHeaderSmall: React.FC<ArtistSeriesHeaderProps> = props => {
   )
 }
 
+const StyledGrid = styled(Grid)`
+  @media (max-width: ${unitlessBreakpoints.lg - 1}px) {
+    max-width: 100%;
+  }
+`
+
+export const HeaderImage = styled(Image)`
+  border-radius: 2px;
+
+  @media (max-width: ${unitlessBreakpoints.sm - 1}px) {
+    max-width: 180px;
+    max-height: 180px;
+    margin: auto;
+  }
+
+  @media (min-width: ${unitlessBreakpoints.sm}px) {
+    max-height: 400px;
+    max-width: 100%;
+  }
+`
+
 export const ArtistSeriesHeaderFragmentContainer = createFragmentContainer(
   ArtistSeriesHeader,
   {
@@ -171,6 +195,9 @@ export const ArtistSeriesHeaderFragmentContainer = createFragmentContainer(
       fragment ArtistSeriesHeader_artistSeries on ArtistSeries {
         title
         description
+        image {
+          url
+        }
         artists(size: 1) {
           name
           image {

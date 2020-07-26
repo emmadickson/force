@@ -17,7 +17,7 @@ jest.mock("v2/Utils/Hooks/useMatchMedia", () => ({
   useMatchMedia: () => ({}),
 }))
 
-jest.mock("lib/environment", () => ({
+jest.mock("lib/isServer", () => ({
   isServer: true,
 }))
 
@@ -57,8 +57,8 @@ describe("NavBar", () => {
 
   describe("desktop", () => {
     const defaultLinks = [
-      [undefined, "ArtworksReveal more"],
-      [undefined, "ArtistsReveal more"],
+      [undefined, "Artists"],
+      [undefined, "Artworks"],
       ["/auctions", "Auctions"],
       ["/articles", "Editorial"],
     ]

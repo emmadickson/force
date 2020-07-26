@@ -51,7 +51,7 @@ export const ConversationHeader: FC<ConversationHeaderProps> = ({
   return (
     <ConversationHeaderContainer
       height="55px"
-      px={[1, 2]}
+      px={[1, 1, 1, 2]}
       alignItems="center"
       justifyContent="space-between"
       width="100%"
@@ -59,10 +59,10 @@ export const ConversationHeader: FC<ConversationHeaderProps> = ({
       <RouterLink to={`/user/conversations`}>
         <ArrowLeftIcon />
       </RouterLink>
-      <Sans size="3t" weight="medium" display={["none", "auto"]}>
+      <Sans size="3t" weight="medium" display={["none", "none", "auto"]}>
         Conversation with {partnerName}
       </Sans>
-      <Sans size="3t" weight="medium" display={["auto", "none"]}>
+      <Sans size="3t" weight="medium" display={["auto", "auto", "none"]}>
         Inquiry with {partnerName}
       </Sans>
       <DetailIcon showDetails={showDetails} setShowDetails={setShowDetails} />
@@ -199,7 +199,7 @@ const DetailIcon: React.FC<DetailsProps> = props => {
       width="28"
       height="28"
       viewBox="0 0 28 28"
-      mr={[0, 1]}
+      mr={[0, 0, 0, 1]}
       onClick={() => {
         setShowDetails(!showDetails)
       }}

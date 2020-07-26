@@ -7,7 +7,8 @@ import styled from "styled-components"
 
 const Container = styled(Box)`
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   border-bottom: 30px solid ${color("white100")};
   border-right: 1px solid ${color("black10")};
   ${media.xs`
@@ -31,7 +32,7 @@ const Conversations: React.FC<ConversationsProps> = props => {
     .indexOf(selectedConversationID)
 
   return (
-    <Container width={["100%", "375px"]}>
+    <Container width={["100%", "100%", "375px"]}>
       <Box>
         {conversations.map(edge => (
           <ConversationSnippet
@@ -57,7 +58,7 @@ export const ConversationsFragmentContainer = createRefetchContainer(
     me: graphql`
       fragment Conversations_me on Me
         @argumentDefinitions(
-          first: { type: "Int", defaultValue: 10 }
+          first: { type: "Int", defaultValue: 25 }
           last: { type: "Int" }
           after: { type: "String" }
           before: { type: "String" }

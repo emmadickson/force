@@ -36,15 +36,15 @@ const getViewWidth = () => {
 const Inbox: React.FC<InboxProps> = ({ selectedConversation, me }) => {
   return (
     <>
-      <Media at="xs">
+      <Media lessThan="md">
         <MobileInboxHeader />
       </Media>
-      <Media greaterThan="xs">
+      <Media greaterThanOrEqual="md">
         <FullHeader partnerName={selectedConversation?.to?.name} />
       </Media>
       <Conversations me={me} />
       <Flex
-        display={["none", "flex"]}
+        display={["none", "none", "flex"]}
         height="100%"
         width="100%"
         justifyContent="center"
@@ -64,8 +64,7 @@ export const ConversationApp: React.FC<ConversationAppProps> = props => {
   const route = findCurrentRoute(props.match)
   let maxWidth
 
-  const isEmpty = me.conversationsConnection.edges.length === 0
-  const conversation = me.conversationsConnection.edges[0]?.node
+  const firstConversation = me?.conversationsConnection?.edges[0]?.node
 
   useEffect(() => {
     setWidth(getViewWidth())
@@ -79,13 +78,13 @@ export const ConversationApp: React.FC<ConversationAppProps> = props => {
   useEffect(() => {
     if (
       isEnabled &&
-      width > parseInt(breakpoints.xs, 10) &&
-      conversation &&
+      width > parseInt(breakpoints.md, 10) &&
+      firstConversation &&
       router
     ) {
-      router.replace(`/user/conversations/${conversation.internalID}`)
+      router.replace(`/user/conversations/${firstConversation.internalID}`)
     }
-  }, [isEnabled, router, conversation, width])
+  }, [isEnabled, router, firstConversation, width])
 
   if (!isEnabled) {
     return <ErrorPage code={404} />
@@ -98,10 +97,10 @@ export const ConversationApp: React.FC<ConversationAppProps> = props => {
   return (
     <AppContainer maxWidth={maxWidth}>
       <Title>Conversations | Artsy</Title>
-      {isEmpty ? (
+      {!firstConversation ? (
         <NoMessages />
       ) : (
-        <Inbox selectedConversation={conversation} me={me} />
+        <Inbox selectedConversation={firstConversation} me={me} />
       )}
     </AppContainer>
   )
@@ -113,7 +112,7 @@ export const ConversationAppFragmentContainer = createFragmentContainer(
     me: graphql`
       fragment ConversationApp_me on Me
         @argumentDefinitions(
-          first: { type: "Int", defaultValue: 10 }
+          first: { type: "Int", defaultValue: 25 }
           last: { type: "Int" }
           after: { type: "String" }
           before: { type: "String" }

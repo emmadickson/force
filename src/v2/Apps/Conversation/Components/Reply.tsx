@@ -1,7 +1,16 @@
-import { Button, Dialog, Flex, FlexProps, color, media } from "@artsy/palette"
+import {
+  Button,
+  Dialog,
+  Flex,
+  FlexProps,
+  color,
+  media,
+  space,
+  themeProps,
+} from "@artsy/palette"
 import { Conversation_conversation } from "v2/__generated__/Conversation_conversation.graphql"
 import React, { useRef, useState } from "react"
-import { Environment } from "react-relay"
+import { Environment, RelayRefetchProps } from "react-relay"
 import styled from "styled-components"
 import { SendConversationMessage } from "../Mutation/SendConversationMessage"
 import { useTracking } from "v2/Artsy/Analytics"
@@ -32,7 +41,10 @@ const StyledTextArea = styled.textarea<{ height?: string }>`
   resize: none;
   min-height: 40px;
   font-size: 16px;
-
+  font-family: ${themeProps.fontFamily.sans.regular as string};
+  padding-top: ${space(0.5)}px;
+  padding-left: ${space(1)}px;
+  padding-right: ${space(1)}px;
   ${media.xs`
     max-height: calc(60vh - 115px);
   `};
@@ -41,17 +53,19 @@ const StyledTextArea = styled.textarea<{ height?: string }>`
 interface ReplyProps {
   conversation: Conversation_conversation
   environment: Environment
+  onScroll?: () => void
+  refetch: RelayRefetchProps["refetch"]
 }
 
 export const Reply: React.FC<ReplyProps> = props => {
-  const { environment, conversation } = props
+  const { environment, conversation, onScroll } = props
   const [buttonDisabled, setButtonDisabled] = useState(true)
   const [loading, setLoading] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const textArea = useRef()
   const { trackEvent } = useTracking()
 
-  const setupAndSendMessage = () => {
+  const setupAndSendMessage = (onScroll = null) => {
     {
       setLoading(true)
       return SendConversationMessage(
@@ -66,7 +80,9 @@ export const Reply: React.FC<ReplyProps> = props => {
           textArea.current.style.height = "inherit"
           setLoading(false)
           setButtonDisabled(true)
-
+          if (onScroll) {
+            onScroll()
+          }
           const {
             internalID,
           } = response?.sendConversationMessage?.messageEdge?.node
@@ -77,6 +93,7 @@ export const Reply: React.FC<ReplyProps> = props => {
               impulseMessageId: internalID,
             })
           )
+          props.refetch({ conversationID: conversation.internalID }, {})
         },
         _error => {
           setLoading(false)
@@ -104,7 +121,14 @@ export const Reply: React.FC<ReplyProps> = props => {
           text: "Discard message",
         }}
       />
-      <StyledFlex p={1} right={[0, null]} zIndex={[null, 2]}>
+      <StyledFlex
+        p={1}
+        right={[0, null]}
+        zIndex={[null, 2]}
+        position={["fixed", "fixed", "fixed", "static"]}
+        bottom={0}
+        left={0}
+      >
         <FullWidthFlex width="100%">
           <StyledTextArea
             onInput={event => {
@@ -130,13 +154,13 @@ export const Reply: React.FC<ReplyProps> = props => {
             ref={textArea}
           />
         </FullWidthFlex>
-        <Flex alignItems="flex-end">
+        <Flex alignItems="flex-end" height="100%">
           <Button
             ml={1}
             disabled={buttonDisabled}
             loading={loading}
             onClick={_event => {
-              setupAndSendMessage()
+              setupAndSendMessage(onScroll)
             }}
           >
             Send

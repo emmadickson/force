@@ -11,23 +11,27 @@ import {
   Sans,
   Separator,
   Spacer,
+  breakpoints,
   color,
   media,
 } from "@artsy/palette"
-import React, { FC } from "react"
+import React, { FC, useEffect } from "react"
 import styled from "styled-components"
 import { createFragmentContainer, graphql } from "react-relay"
+import { useWindowSize } from "v2/Utils/Hooks/useWindowSize"
 import { Details_conversation } from "v2/__generated__/Details_conversation.graphql"
 import ArtworkDetails from "v2/Components/Artwork/Metadata"
 import { zIndex } from "styled-system"
+import { debounce } from "lodash"
+import { getViewportDimensions } from "v2/Utils/viewport"
 
 export const DETAIL_BOX_ANIMATION = `transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);`
 const DETAIL_BOX_XS_ANIMATION = `transition: opacity 0.3s, z-index 0.3s;`
 const DETAIL_BOX_MD_ANIMATION = `transition: transform 0.3s;`
 
-// in XS screens transition is animated with `opacity`. z-index: -1 is also needed when showDetail is false
+// in XS/S/M screens transition is animated with `opacity`. z-index: -1 is also needed when showDetail is false
 // in XL screen it is animated with `width` because animation needs to push the mid column content
-// in S/M/L screens it is animated with `translate` for better performance (than `width`)
+// in L screens it is animated with `translate` for better performance (than `width`)
 const DetailsContainer = styled(Flex)<{ opacity?: 0 | 1; transform?: string }>`
   border-left: 1px solid ${color("black10")};
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -39,11 +43,12 @@ const DetailsContainer = styled(Flex)<{ opacity?: 0 | 1; transform?: string }>`
     ${DETAIL_BOX_MD_ANIMATION}
     z-index: 0;
   `}
-  ${media.xs`
+  ${media.md`
     ${DETAIL_BOX_XS_ANIMATION}
     transform: none;
     opacity: ${({ opacity }: { opacity?: 0 | 1 }) => opacity};
     top: 114px;
+    position: fixed;
     ${zIndex}
   `}
 `
@@ -51,9 +56,35 @@ const DetailsContainer = styled(Flex)<{ opacity?: 0 | 1; transform?: string }>`
 interface DetailsProps extends FlexProps {
   conversation: Details_conversation
   showDetails: boolean
+  setShowDetails: (showDetails: boolean) => void
 }
 
-export const Details: FC<DetailsProps> = ({ conversation, ...props }) => {
+export const Details: FC<DetailsProps> = ({
+  conversation,
+  setShowDetails,
+  showDetails,
+  ...props
+}) => {
+  const { width } = useWindowSize()
+
+  useEffect(() => {
+    const initialWidth = width
+    const listenForResize = debounce(() => {
+      const screenWidth = getViewportDimensions().width
+      // Check if the screen width got smaller while the details panel was open
+      if (
+        screenWidth <= parseInt(breakpoints.xs, 10) &&
+        initialWidth > parseInt(breakpoints.xs, 10) &&
+        showDetails
+      ) {
+        setShowDetails(false)
+      }
+    })
+    window.addEventListener("resize", listenForResize)
+    return () => window.removeEventListener("resize", listenForResize)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDetails])
+
   const item =
     conversation.items?.[0]?.item?.__typename !== "%other" &&
     conversation.items?.[0]?.item
@@ -80,26 +111,37 @@ export const Details: FC<DetailsProps> = ({ conversation, ...props }) => {
     )
   })
 
+  const getDetailsContainerWidth = () => {
+    // For big screens
+    if (width > parseInt(breakpoints.xs, 10)) {
+      if (showDetails) {
+        return "376px"
+      }
+      return ["376px", "376px", "376px", "376px", "0"]
+    }
+
+    // For small screens
+    return "100%"
+  }
+
   return (
     <DetailsContainer
       flexDirection="column"
       justifyContent="flex-start"
       height={[
         "calc(100% - 115px)",
-        "calc(100% - 145px)",
-        "calc(100% - 145px)",
+        "calc(100% - 115px)",
+        null,
         "calc(100% - 145px)",
         "100%",
       ]}
       flexShrink={0}
       position={["absolute", "absolute", "absolute", "absolute", "static"]}
       right={[0, 0, 0, 0, "auto"]}
-      width={
-        props.showDetails ? "376px" : ["376px", "376px", "376px", "376px", "0"]
-      }
-      opacity={props.showDetails ? 1 : (0 as any)}
-      transform={props.showDetails ? "translateX(0)" : "translateX(376px)"}
-      zIndex={props.showDetails ? 1 : -1}
+      width={getDetailsContainerWidth()}
+      opacity={showDetails ? 1 : (0 as any)}
+      transform={showDetails ? "translateX(0)" : "translateX(376px)"}
+      zIndex={showDetails ? 1 : -1}
       {...props}
     >
       <EntityHeader

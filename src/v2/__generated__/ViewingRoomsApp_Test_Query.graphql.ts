@@ -4,16 +4,55 @@ import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type ViewingRoomsApp_Test_QueryVariables = {};
 export type ViewingRoomsApp_Test_QueryResponse = {
-    readonly viewingRooms: {
-        readonly " $fragmentRefs": FragmentRefs<"ViewingRoomsApp_viewingRooms">;
+    readonly allViewingRooms: {
+        readonly " $fragmentRefs": FragmentRefs<"ViewingRoomsApp_allViewingRooms">;
+    } | null;
+    readonly featuredViewingRooms: {
+        readonly " $fragmentRefs": FragmentRefs<"ViewingRoomsApp_featuredViewingRooms">;
     } | null;
 };
 export type ViewingRoomsApp_Test_QueryRawResponse = {
-    readonly viewingRooms: ({
+    readonly allViewingRooms: ({
+        readonly viewingRoomsConnection: ({
+            readonly edges: ReadonlyArray<({
+                readonly node: ({
+                    readonly slug: string;
+                    readonly status: string;
+                    readonly title: string;
+                    readonly heroImageURL: string | null;
+                    readonly distanceToOpen: string | null;
+                    readonly distanceToClose: string | null;
+                    readonly partner: ({
+                        readonly name: string | null;
+                        readonly id: string | null;
+                    }) | null;
+                    readonly artworksConnection: ({
+                        readonly totalCount: number | null;
+                        readonly edges: ReadonlyArray<({
+                            readonly node: ({
+                                readonly image: ({
+                                    readonly square: string | null;
+                                    readonly regular: string | null;
+                                }) | null;
+                                readonly id: string | null;
+                            }) | null;
+                        }) | null> | null;
+                    }) | null;
+                    readonly __typename: "ViewingRoom";
+                }) | null;
+                readonly cursor: string;
+            }) | null> | null;
+            readonly pageInfo: {
+                readonly endCursor: string | null;
+                readonly hasNextPage: boolean;
+            };
+        }) | null;
+    }) | null;
+    readonly featuredViewingRooms: ({
         readonly edges: ReadonlyArray<({
             readonly node: ({
-                readonly slug: string;
                 readonly status: string;
+                readonly slug: string;
                 readonly title: string;
                 readonly heroImageURL: string | null;
                 readonly distanceToOpen: string | null;
@@ -21,18 +60,6 @@ export type ViewingRoomsApp_Test_QueryRawResponse = {
                 readonly partner: ({
                     readonly name: string | null;
                     readonly id: string | null;
-                }) | null;
-                readonly artworksConnection: ({
-                    readonly totalCount: number | null;
-                    readonly edges: ReadonlyArray<({
-                        readonly node: ({
-                            readonly image: ({
-                                readonly square: string | null;
-                                readonly regular: string | null;
-                            }) | null;
-                            readonly id: string | null;
-                        }) | null;
-                    }) | null> | null;
                 }) | null;
             }) | null;
         }) | null> | null;
@@ -48,20 +75,27 @@ export type ViewingRoomsApp_Test_Query = {
 
 /*
 query ViewingRoomsApp_Test_Query {
-  viewingRooms {
-    ...ViewingRoomsApp_viewingRooms
+  allViewingRooms: viewer {
+    ...ViewingRoomsApp_allViewingRooms
+  }
+  featuredViewingRooms: viewingRooms(featured: true) {
+    ...ViewingRoomsApp_featuredViewingRooms
   }
 }
 
-fragment ViewingRoomsApp_viewingRooms on ViewingRoomConnection {
-  ...ViewingRoomsLatestGrid_viewingRooms
+fragment ViewingRoomsApp_allViewingRooms on Viewer {
+  ...ViewingRoomsLatestGrid_viewingRooms_9Znkm
 }
 
-fragment ViewingRoomsLatestGrid_viewingRooms on ViewingRoomConnection {
+fragment ViewingRoomsApp_featuredViewingRooms on ViewingRoomConnection {
+  ...ViewingRoomsFeaturedRail_featuredViewingRooms
+}
+
+fragment ViewingRoomsFeaturedRail_featuredViewingRooms on ViewingRoomConnection {
   edges {
     node {
-      slug
       status
+      slug
       title
       heroImageURL
       distanceToOpen(short: true)
@@ -70,18 +104,43 @@ fragment ViewingRoomsLatestGrid_viewingRooms on ViewingRoomConnection {
         name
         id
       }
-      artworksConnection(first: 2) {
-        totalCount
-        edges {
-          node {
-            image {
-              square: url(version: "square")
-              regular: url(version: "large")
+    }
+  }
+}
+
+fragment ViewingRoomsLatestGrid_viewingRooms_9Znkm on Viewer {
+  viewingRoomsConnection {
+    edges {
+      node {
+        slug
+        status
+        title
+        heroImageURL
+        distanceToOpen(short: true)
+        distanceToClose(short: true)
+        partner {
+          name
+          id
+        }
+        artworksConnection(first: 2) {
+          totalCount
+          edges {
+            node {
+              image {
+                square: url(version: "square")
+                regular: url(version: "large")
+              }
+              id
             }
-            id
           }
         }
+        __typename
       }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
@@ -91,16 +150,84 @@ const node: ConcreteRequest = (function(){
 var v0 = [
   {
     "kind": "Literal",
-    "name": "short",
+    "name": "featured",
     "value": true
   }
 ],
 v1 = {
   "kind": "ScalarField",
   "alias": null,
+  "name": "slug",
+  "args": null,
+  "storageKey": null
+},
+v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "status",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "title",
+  "args": null,
+  "storageKey": null
+},
+v4 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "heroImageURL",
+  "args": null,
+  "storageKey": null
+},
+v5 = [
+  {
+    "kind": "Literal",
+    "name": "short",
+    "value": true
+  }
+],
+v6 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "distanceToOpen",
+  "args": (v5/*: any*/),
+  "storageKey": "distanceToOpen(short:true)"
+},
+v7 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "distanceToClose",
+  "args": (v5/*: any*/),
+  "storageKey": "distanceToClose(short:true)"
+},
+v8 = {
+  "kind": "ScalarField",
+  "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
+},
+v9 = {
+  "kind": "LinkedField",
+  "alias": null,
+  "name": "partner",
+  "storageKey": null,
+  "args": null,
+  "concreteType": "Partner",
+  "plural": false,
+  "selections": [
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "name",
+      "args": null,
+      "storageKey": null
+    },
+    (v8/*: any*/)
+  ]
 };
 return {
   "kind": "Request",
@@ -113,16 +240,32 @@ return {
     "selections": [
       {
         "kind": "LinkedField",
-        "alias": null,
-        "name": "viewingRooms",
+        "alias": "allViewingRooms",
+        "name": "viewer",
         "storageKey": null,
         "args": null,
+        "concreteType": "Viewer",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "FragmentSpread",
+            "name": "ViewingRoomsApp_allViewingRooms",
+            "args": null
+          }
+        ]
+      },
+      {
+        "kind": "LinkedField",
+        "alias": "featuredViewingRooms",
+        "name": "viewingRooms",
+        "storageKey": "viewingRooms(featured:true)",
+        "args": (v0/*: any*/),
         "concreteType": "ViewingRoomConnection",
         "plural": false,
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "ViewingRoomsApp_viewingRooms",
+            "name": "ViewingRoomsApp_featuredViewingRooms",
             "args": null
           }
         ]
@@ -136,10 +279,193 @@ return {
     "selections": [
       {
         "kind": "LinkedField",
-        "alias": null,
-        "name": "viewingRooms",
+        "alias": "allViewingRooms",
+        "name": "viewer",
         "storageKey": null,
         "args": null,
+        "concreteType": "Viewer",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "viewingRoomsConnection",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "ViewingRoomConnection",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "edges",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "ViewingRoomEdge",
+                "plural": true,
+                "selections": [
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "name": "node",
+                    "storageKey": null,
+                    "args": null,
+                    "concreteType": "ViewingRoom",
+                    "plural": false,
+                    "selections": [
+                      (v1/*: any*/),
+                      (v2/*: any*/),
+                      (v3/*: any*/),
+                      (v4/*: any*/),
+                      (v6/*: any*/),
+                      (v7/*: any*/),
+                      (v9/*: any*/),
+                      {
+                        "kind": "LinkedField",
+                        "alias": null,
+                        "name": "artworksConnection",
+                        "storageKey": "artworksConnection(first:2)",
+                        "args": [
+                          {
+                            "kind": "Literal",
+                            "name": "first",
+                            "value": 2
+                          }
+                        ],
+                        "concreteType": "ArtworkConnection",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
+                            "name": "totalCount",
+                            "args": null,
+                            "storageKey": null
+                          },
+                          {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "edges",
+                            "storageKey": null,
+                            "args": null,
+                            "concreteType": "ArtworkEdge",
+                            "plural": true,
+                            "selections": [
+                              {
+                                "kind": "LinkedField",
+                                "alias": null,
+                                "name": "node",
+                                "storageKey": null,
+                                "args": null,
+                                "concreteType": "Artwork",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "name": "image",
+                                    "storageKey": null,
+                                    "args": null,
+                                    "concreteType": "Image",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": "square",
+                                        "name": "url",
+                                        "args": [
+                                          {
+                                            "kind": "Literal",
+                                            "name": "version",
+                                            "value": "square"
+                                          }
+                                        ],
+                                        "storageKey": "url(version:\"square\")"
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": "regular",
+                                        "name": "url",
+                                        "args": [
+                                          {
+                                            "kind": "Literal",
+                                            "name": "version",
+                                            "value": "large"
+                                          }
+                                        ],
+                                        "storageKey": "url(version:\"large\")"
+                                      }
+                                    ]
+                                  },
+                                  (v8/*: any*/)
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "__typename",
+                        "args": null,
+                        "storageKey": null
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "name": "cursor",
+                    "args": null,
+                    "storageKey": null
+                  }
+                ]
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "pageInfo",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "PageInfo",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "name": "endCursor",
+                    "args": null,
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "name": "hasNextPage",
+                    "args": null,
+                    "storageKey": null
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "LinkedHandle",
+            "alias": null,
+            "name": "viewingRoomsConnection",
+            "args": null,
+            "handle": "connection",
+            "key": "ViewingRoomsLatestGrid_viewingRoomsConnection",
+            "filters": null
+          }
+        ]
+      },
+      {
+        "kind": "LinkedField",
+        "alias": "featuredViewingRooms",
+        "name": "viewingRooms",
+        "storageKey": "viewingRooms(featured:true)",
+        "args": (v0/*: any*/),
         "concreteType": "ViewingRoomConnection",
         "plural": false,
         "selections": [
@@ -161,151 +487,13 @@ return {
                 "concreteType": "ViewingRoom",
                 "plural": false,
                 "selections": [
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "slug",
-                    "args": null,
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "status",
-                    "args": null,
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "title",
-                    "args": null,
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "heroImageURL",
-                    "args": null,
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "distanceToOpen",
-                    "args": (v0/*: any*/),
-                    "storageKey": "distanceToOpen(short:true)"
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "name": "distanceToClose",
-                    "args": (v0/*: any*/),
-                    "storageKey": "distanceToClose(short:true)"
-                  },
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "partner",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": "Partner",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "name",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      (v1/*: any*/)
-                    ]
-                  },
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "artworksConnection",
-                    "storageKey": "artworksConnection(first:2)",
-                    "args": [
-                      {
-                        "kind": "Literal",
-                        "name": "first",
-                        "value": 2
-                      }
-                    ],
-                    "concreteType": "ArtworkConnection",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "totalCount",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "LinkedField",
-                        "alias": null,
-                        "name": "edges",
-                        "storageKey": null,
-                        "args": null,
-                        "concreteType": "ArtworkEdge",
-                        "plural": true,
-                        "selections": [
-                          {
-                            "kind": "LinkedField",
-                            "alias": null,
-                            "name": "node",
-                            "storageKey": null,
-                            "args": null,
-                            "concreteType": "Artwork",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "kind": "LinkedField",
-                                "alias": null,
-                                "name": "image",
-                                "storageKey": null,
-                                "args": null,
-                                "concreteType": "Image",
-                                "plural": false,
-                                "selections": [
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": "square",
-                                    "name": "url",
-                                    "args": [
-                                      {
-                                        "kind": "Literal",
-                                        "name": "version",
-                                        "value": "square"
-                                      }
-                                    ],
-                                    "storageKey": "url(version:\"square\")"
-                                  },
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": "regular",
-                                    "name": "url",
-                                    "args": [
-                                      {
-                                        "kind": "Literal",
-                                        "name": "version",
-                                        "value": "large"
-                                      }
-                                    ],
-                                    "storageKey": "url(version:\"large\")"
-                                  }
-                                ]
-                              },
-                              (v1/*: any*/)
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  (v2/*: any*/),
+                  (v1/*: any*/),
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v9/*: any*/)
                 ]
               }
             ]
@@ -318,10 +506,10 @@ return {
     "operationKind": "query",
     "name": "ViewingRoomsApp_Test_Query",
     "id": null,
-    "text": "query ViewingRoomsApp_Test_Query {\n  viewingRooms {\n    ...ViewingRoomsApp_viewingRooms\n  }\n}\n\nfragment ViewingRoomsApp_viewingRooms on ViewingRoomConnection {\n  ...ViewingRoomsLatestGrid_viewingRooms\n}\n\nfragment ViewingRoomsLatestGrid_viewingRooms on ViewingRoomConnection {\n  edges {\n    node {\n      slug\n      status\n      title\n      heroImageURL\n      distanceToOpen(short: true)\n      distanceToClose(short: true)\n      partner {\n        name\n        id\n      }\n      artworksConnection(first: 2) {\n        totalCount\n        edges {\n          node {\n            image {\n              square: url(version: \"square\")\n              regular: url(version: \"large\")\n            }\n            id\n          }\n        }\n      }\n    }\n  }\n}\n",
+    "text": "query ViewingRoomsApp_Test_Query {\n  allViewingRooms: viewer {\n    ...ViewingRoomsApp_allViewingRooms\n  }\n  featuredViewingRooms: viewingRooms(featured: true) {\n    ...ViewingRoomsApp_featuredViewingRooms\n  }\n}\n\nfragment ViewingRoomsApp_allViewingRooms on Viewer {\n  ...ViewingRoomsLatestGrid_viewingRooms_9Znkm\n}\n\nfragment ViewingRoomsApp_featuredViewingRooms on ViewingRoomConnection {\n  ...ViewingRoomsFeaturedRail_featuredViewingRooms\n}\n\nfragment ViewingRoomsFeaturedRail_featuredViewingRooms on ViewingRoomConnection {\n  edges {\n    node {\n      status\n      slug\n      title\n      heroImageURL\n      distanceToOpen(short: true)\n      distanceToClose(short: true)\n      partner {\n        name\n        id\n      }\n    }\n  }\n}\n\nfragment ViewingRoomsLatestGrid_viewingRooms_9Znkm on Viewer {\n  viewingRoomsConnection {\n    edges {\n      node {\n        slug\n        status\n        title\n        heroImageURL\n        distanceToOpen(short: true)\n        distanceToClose(short: true)\n        partner {\n          name\n          id\n        }\n        artworksConnection(first: 2) {\n          totalCount\n          edges {\n            node {\n              image {\n                square: url(version: \"square\")\n                regular: url(version: \"large\")\n              }\n              id\n            }\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '9c5560fcd60d7ed4ebfab6f143bccfb7';
+(node as any).hash = '2bc02bd85bb6be749cc2e3a289aace6b';
 export default node;

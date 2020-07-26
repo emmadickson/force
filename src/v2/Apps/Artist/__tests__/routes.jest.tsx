@@ -13,10 +13,12 @@ describe("Artist/routes", () => {
     const source = new RecordSource()
     const store = new Store(source)
     const environment = new Environment({ network, store })
+    const user = {}
 
     const result = await getFarceResult({
       url,
       routeConfig: routes,
+      matchContext: { user },
       resolver: new Resolver(environment),
       render: () => <div>hello</div>,
     })
@@ -200,6 +202,7 @@ const overviewArtist: routes_ArtistTopLevelQueryRawResponse["artist"] = {
       edges: [
         {
           node: {
+            __typename: "Gene",
             id: "opaque-gene-id",
             slug: "cubism",
           },
